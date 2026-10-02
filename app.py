@@ -63,11 +63,17 @@ PLOT_BASE = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(14,22,20,0.6)",
     font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
-    xaxis=dict(gridcolor="#1e2e2a", linecolor="#2d4440"),
-    yaxis=dict(gridcolor="#1e2e2a", linecolor="#2d4440"),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#2d4440"),
     margin=dict(t=50, b=40, l=40, r=20),
 )
+_AXIS = dict(gridcolor="#1e2e2a", linecolor="#2d4440")
+
+def _lax(**kw):
+    out = dict(PLOT_BASE)
+    out["xaxis"] = {**_AXIS, **kw.pop("xaxis", {})}
+    out["yaxis"] = {**_AXIS, **kw.pop("yaxis", {})}
+    out.update(kw)
+    return out
 
 # ── CSS ────────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -283,7 +289,7 @@ with tab_prog:
 
     display_cols = ["Railroad", "MYtD Est. Bushels", "vs LY", "% vs LY", "vs 6-yr Avg", "% vs Avg"]
     tbl = pd.DataFrame(rows)[display_cols]
-    st.dataframe(tbl, use_container_width=True, hide_index=True)
+    st.dataframe(tbl, width='stretch', hide_index=True)
 
     st.divider()
 
@@ -304,14 +310,12 @@ with tab_prog:
             marker_color=rr_colors,
             text=rr_texts, textposition="outside",
         ))
-        fig_rr.update_layout(
+        fig_rr.update_layout(**_lax(
             title=f"Railroad % vs Last Year — {sel_year} MYtD (Week {max_wk})",
-            yaxis_title="% vs LY",
-            yaxis=dict(zeroline=True, zerolinecolor="#4a5d58"),
+            yaxis=dict(title="% vs LY", zeroline=True, zerolinecolor="#4a5d58"),
             height=380,
-            **PLOT_BASE,
-        )
-        st.plotly_chart(fig_rr, use_container_width=True)
+        ))
+        st.plotly_chart(fig_rr, width='stretch')
 
     st.divider()
 
@@ -358,14 +362,12 @@ with tab_prog:
             text=[fmt_pct(v) for v in s_df["pct_ly"]],
             textposition="outside",
         ))
-        fig_st.update_layout(
+        fig_st.update_layout(**_lax(
             title=f"State % vs Last Year — {sel_year} MYtD (Week {max_wk})",
-            xaxis_title="% vs LY",
-            xaxis=dict(zeroline=True, zerolinecolor="#4a5d58"),
+            xaxis=dict(title="% vs LY", zeroline=True, zerolinecolor="#4a5d58"),
             height=max(400, len(state_rows) * 30),
-            **PLOT_BASE,
-        )
-        st.plotly_chart(fig_st, use_container_width=True)
+        ))
+        st.plotly_chart(fig_st, width='stretch')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -396,8 +398,8 @@ with tab_monthly:
         title=f"Monthly Grain Rail Shipments — {m_year}",
         category_orders={"month_name": list(MY_MONTHS.values())},
     )
-    fig_m.update_layout(height=450, **PLOT_BASE)
-    st.plotly_chart(fig_m, use_container_width=True)
+    fig_m.update_layout(**_lax(height=450))
+    st.plotly_chart(fig_m, width='stretch')
 
     # Pivot table
     pivot_m = (
@@ -413,7 +415,7 @@ with tab_monthly:
         if col != "Railroad":
             fmt_df[col] = fmt_df[col].apply(fmt_bu)
 
-    st.dataframe(fmt_df, use_container_width=True, hide_index=True)
+    st.dataframe(fmt_df, width='stretch', hide_index=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -455,7 +457,7 @@ with tab_map:
         font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
         margin=dict(t=40, b=0, l=0, r=0),
     )
-    st.plotly_chart(fig_map, use_container_width=True)
+    st.plotly_chart(fig_map, width='stretch')
 
     # State breakdown table
     state_totals_sorted = state_totals.sort_values(metric_col, ascending=False)
@@ -469,7 +471,7 @@ with tab_map:
         state_totals_sorted[map_metric] = state_totals_sorted[map_metric].apply(fmt_cars)
 
     with st.expander("📋 State detail table"):
-        st.dataframe(state_totals_sorted, use_container_width=True, hide_index=True)
+        st.dataframe(state_totals_sorted, width='stretch', hide_index=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -502,8 +504,8 @@ with tab_weekly:
                 "marketing_year": "Marketing Year"},
         title="Weekly Grain Rail Shipments by Marketing Year",
     )
-    fig_wk.update_layout(height=420, **PLOT_BASE)
-    st.plotly_chart(fig_wk, use_container_width=True)
+    fig_wk.update_layout(**_lax(height=420))
+    st.plotly_chart(fig_wk, width='stretch')
 
     # Cumulative
     weekly_cum = weekly.copy().sort_values(["marketing_year", "my_week"])
@@ -515,8 +517,8 @@ with tab_weekly:
                 "marketing_year": "Marketing Year"},
         title="Cumulative Shipments by Marketing Year",
     )
-    fig_cum.update_layout(height=420, **PLOT_BASE)
-    st.plotly_chart(fig_cum, use_container_width=True)
+    fig_cum.update_layout(**_lax(height=420))
+    st.plotly_chart(fig_cum, width='stretch')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -549,8 +551,8 @@ with tab_yearly:
                 "railroad": "Railroad"},
         title="Annual Grain Rail Shipments by Railroad",
     )
-    fig_y.update_layout(height=450, **PLOT_BASE)
-    st.plotly_chart(fig_y, use_container_width=True)
+    fig_y.update_layout(**_lax(height=450))
+    st.plotly_chart(fig_y, width='stretch')
 
     # Pivot table
     pivot_y = (
@@ -566,7 +568,7 @@ with tab_yearly:
         if col != "Railroad":
             fmt_y[col] = fmt_y[col].apply(fmt_bu)
 
-    st.dataframe(fmt_y, use_container_width=True, hide_index=True)
+    st.dataframe(fmt_y, width='stretch', hide_index=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -614,7 +616,7 @@ with tab_summary:
             paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
             legend=dict(bgcolor="rgba(0,0,0,0)"),
         )
-        st.plotly_chart(fig_dest, use_container_width=True)
+        st.plotly_chart(fig_dest, width='stretch')
 
     with col_rr:
         rr_tot = (
@@ -628,8 +630,8 @@ with tab_summary:
             labels={"est_bushels": "Est. Bushels", "railroad": "Railroad"},
             title=f"MYtD by Railroad — {current_my}",
         )
-        fig_rr_s.update_layout(showlegend=False, height=380, **PLOT_BASE)
-        st.plotly_chart(fig_rr_s, use_container_width=True)
+        fig_rr_s.update_layout(**_lax(showlegend=False, height=380))
+        st.plotly_chart(fig_rr_s, width='stretch')
 
     st.divider()
 
@@ -646,8 +648,8 @@ with tab_summary:
         title="Full-Year Grain Rail Shipments — All Railroads",
     )
     fig_yoy.update_traces(marker_color="#4a5d58")
-    fig_yoy.update_layout(height=380, **PLOT_BASE)
-    st.plotly_chart(fig_yoy, use_container_width=True)
+    fig_yoy.update_layout(**_lax(height=380))
+    st.plotly_chart(fig_yoy, width='stretch')
 
 st.markdown(
     f'<div style="font-family:inherit;margin-top:40px;padding:14px 20px;border-top:1px solid #2d3035;'
