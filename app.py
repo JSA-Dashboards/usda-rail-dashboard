@@ -62,7 +62,7 @@ EASTERN_STATES = ["IL", "IN", "OH", "MI", "KY"]
 PLOT_BASE = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(14,22,20,0.6)",
-    font_color="#d4e8e4",
+    font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
     xaxis=dict(gridcolor="#1e2e2a", linecolor="#2d4440"),
     yaxis=dict(gridcolor="#1e2e2a", linecolor="#2d4440"),
     legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#2d4440"),
@@ -452,7 +452,7 @@ with tab_map:
     fig_map.update_layout(
         geo_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
-        font_color="#d4e8e4",
+        font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
         margin=dict(t=40, b=0, l=0, r=0),
     )
     st.plotly_chart(fig_map, use_container_width=True)
@@ -611,7 +611,7 @@ with tab_summary:
             title=f"MYtD by Destination — {current_my}",
         )
         fig_dest.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)", font_color="#d4e8e4",
+            paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
             legend=dict(bgcolor="rgba(0,0,0,0)"),
         )
         st.plotly_chart(fig_dest, use_container_width=True)
