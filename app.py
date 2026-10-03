@@ -68,10 +68,18 @@ PLOT_BASE = dict(
 )
 _AXIS = dict(gridcolor="#f1f5f9", linecolor="#e2e8f0")
 
+_LOGO_IMG = dict(
+    source="https://www.jpsi.com/wp-content/themes/gate39media/img/logo.png",
+    xref="paper", yref="paper",
+    x=1, y=0, xanchor="right", yanchor="bottom",
+    sizex=0.14, sizey=0.14, opacity=0.18, layer="above",
+)
+
 def _lax(**kw):
     out = dict(PLOT_BASE)
     out["xaxis"] = {**_AXIS, **kw.pop("xaxis", {})}
     out["yaxis"] = {**_AXIS, **kw.pop("yaxis", {})}
+    out["images"] = [_LOGO_IMG]
     out.update(kw)
     return out
 
@@ -457,6 +465,7 @@ with tab_map:
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#32373c", family="Inter, sans-serif", size=11),
         margin=dict(t=40, b=0, l=0, r=0),
+        images=[_LOGO_IMG],
     )
     st.plotly_chart(fig_map, width='stretch')
 
@@ -616,6 +625,7 @@ with tab_summary:
         fig_dest.update_layout(
             paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#32373c", family="Inter, sans-serif", size=11),
             legend=dict(bgcolor="rgba(0,0,0,0)"),
+            images=[_LOGO_IMG],
         )
         st.plotly_chart(fig_dest, width='stretch')
 
