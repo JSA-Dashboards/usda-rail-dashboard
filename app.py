@@ -61,12 +61,12 @@ EASTERN_STATES = ["IL", "IN", "OH", "MI", "KY"]
 
 PLOT_BASE = dict(
     paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(14,22,20,0.6)",
-    font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
-    legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#2d4440"),
+    plot_bgcolor="#ffffff",
+    font=dict(color="#32373c", family="Inter, sans-serif", size=11),
+    legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#e2e8f0"),
     margin=dict(t=50, b=40, l=40, r=20),
 )
-_AXIS = dict(gridcolor="#1e2e2a", linecolor="#2d4440")
+_AXIS = dict(gridcolor="#f1f5f9", linecolor="#e2e8f0")
 
 def _lax(**kw):
     out = dict(PLOT_BASE)
@@ -78,15 +78,16 @@ def _lax(**kw):
 # ── CSS ────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-[data-testid="stAppViewContainer"] { background: #0e1614; }
+[data-testid="stAppViewContainer"] { background: #f8fafc; }
 [data-testid="stHeader"]            { background: transparent; }
 .block-container                    { padding-top: 1.2rem; }
 div[data-testid="stTabs"] button[aria-selected="true"] {
-    border-bottom: 2px solid #4a5d58; color: #d4e8e4;
+    border-bottom: 2px solid #0693e3; color: #0693e3;
 }
 div[data-testid="metric-container"] {
-    background: #162019; border: 1px solid #2d4440;
+    background: #ffffff; border: 1px solid #e2e8f0;
     border-radius: 10px; padding: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -302,7 +303,7 @@ with tab_prog:
     if chart_rows:
         rr_names  = [r["Railroad"] for r in chart_rows]
         rr_pcts   = [r["_p_ly"] for r in chart_rows]
-        rr_colors = ["#34d399" if v >= 0 else "#f87171" for v in rr_pcts]
+        rr_colors = ["#16a34a" if v >= 0 else "#dc2626" for v in rr_pcts]
         rr_texts  = [fmt_pct(v) for v in rr_pcts]
 
         fig_rr = go.Figure(go.Bar(
@@ -312,7 +313,7 @@ with tab_prog:
         ))
         fig_rr.update_layout(**_lax(
             title=f"Railroad % vs Last Year — {sel_year} MYtD (Week {max_wk})",
-            yaxis=dict(title="% vs LY", zeroline=True, zerolinecolor="#4a5d58"),
+            yaxis=dict(title="% vs LY", zeroline=True, zerolinecolor="#94a3b8"),
             height=380,
         ))
         st.plotly_chart(fig_rr, width='stretch')
@@ -357,14 +358,14 @@ with tab_prog:
             x=s_df["pct_ly"],
             y=s_df["state"],
             orientation="h",
-            marker_color=["#34d399" if (v or 0) >= 0 else "#f87171"
+            marker_color=["#16a34a" if (v or 0) >= 0 else "#dc2626"
                           for v in s_df["pct_ly"]],
             text=[fmt_pct(v) for v in s_df["pct_ly"]],
             textposition="outside",
         ))
         fig_st.update_layout(**_lax(
             title=f"State % vs Last Year — {sel_year} MYtD (Week {max_wk})",
-            xaxis=dict(title="% vs LY", zeroline=True, zerolinecolor="#4a5d58"),
+            xaxis=dict(title="% vs LY", zeroline=True, zerolinecolor="#94a3b8"),
             height=max(400, len(state_rows) * 30),
         ))
         st.plotly_chart(fig_st, width='stretch')
@@ -446,15 +447,15 @@ with tab_map:
     fig_map = px.choropleth(
         state_totals, locations="state", locationmode="USA-states",
         color=metric_col, scope="usa",
-        color_continuous_scale=[[0, "#162019"], [0.3, "#2d6a4f"],
-                                 [0.7, "#4a5d58"], [1, "#95d5b2"]],
+        color_continuous_scale=[[0, "#dbeafe"], [0.3, "#60a5fa"],
+                                 [0.7, "#0693e3"], [1, "#1d4ed8"]],
         labels={metric_col: map_metric},
         title=f"{map_metric} by State — {map_year}  ({map_wk_mode})",
     )
     fig_map.update_layout(
         geo_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
+        font=dict(color="#32373c", family="Inter, sans-serif", size=11),
         margin=dict(t=40, b=0, l=0, r=0),
     )
     st.plotly_chart(fig_map, width='stretch')
@@ -613,7 +614,7 @@ with tab_summary:
             title=f"MYtD by Destination — {current_my}",
         )
         fig_dest.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#d4e8e4", family="Inter, sans-serif", size=11),
+            paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#32373c", family="Inter, sans-serif", size=11),
             legend=dict(bgcolor="rgba(0,0,0,0)"),
         )
         st.plotly_chart(fig_dest, width='stretch')
@@ -647,12 +648,12 @@ with tab_summary:
         labels={"est_bushels": "Est. Bushels", "marketing_year": "Marketing Year"},
         title="Full-Year Grain Rail Shipments — All Railroads",
     )
-    fig_yoy.update_traces(marker_color="#4a5d58")
+    fig_yoy.update_traces(marker_color="#0693e3")
     fig_yoy.update_layout(**_lax(height=380))
     st.plotly_chart(fig_yoy, width='stretch')
 
 st.markdown(
-    f'<div style="font-family:inherit;margin-top:40px;padding:14px 20px;border-top:1px solid #2d3035;'
+    f'<div style="font-family:inherit;margin-top:40px;padding:14px 20px;border-top:1px solid #e2e8f0;'
     f'color:#6b7280;font-size:inherit;line-height:1.6;">'
     f'Trading commodity futures, options on futures, cash commodities, and over-the-counter '
     f'derivative products involves substantial risk of loss and may not be suitable for all investors. '
