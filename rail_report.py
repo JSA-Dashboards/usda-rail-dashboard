@@ -179,19 +179,27 @@ def build_report(df: pd.DataFrame) -> tuple[str, str]:
     <div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">
       {current_my} Marketing Year · Week {max_wk} MYtD · vs {ly or "N/A"}
     </div>
-    <div style="display:flex;gap:32px;flex-wrap:wrap">
-      <div>
-        <div style="font-size:22px;font-weight:700;color:{JPSI_DARK}">{_fmt_bu(cur_tot)} bu</div>
-        <div style="font-size:12px;color:#6b7280">Total MYtD Shipments</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div style="display:flex;gap:32px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:22px;font-weight:700;color:{JPSI_DARK}">{_fmt_bu(cur_tot)} bu</div>
+          <div style="font-size:12px;color:#6b7280">Total MYtD Shipments</div>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:700;color:{nat_color}">{nat_pct_str}</div>
+          <div style="font-size:12px;color:#6b7280">vs Prior Year</div>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:700;color:{JPSI_DARK}">{_fmt_bu(ly_tot)} bu</div>
+          <div style="font-size:12px;color:#6b7280">{ly} MYtD (same weeks)</div>
+        </div>
       </div>
-      <div>
-        <div style="font-size:22px;font-weight:700;color:{nat_color}">{nat_pct_str}</div>
-        <div style="font-size:12px;color:#6b7280">vs Prior Year</div>
-      </div>
-      <div>
-        <div style="font-size:22px;font-weight:700;color:{JPSI_DARK}">{_fmt_bu(ly_tot)} bu</div>
-        <div style="font-size:12px;color:#6b7280">{ly} MYtD (same weeks)</div>
-      </div>
+      <a href="https://jsa-us-rail-dashboard.streamlit.app"
+         style="display:inline-block;background:{JPSI_BLUE};color:#ffffff;font-size:13px;font-weight:600;
+                padding:10px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;
+                align-self:center">
+        View Dashboard →
+      </a>
     </div>
   </div>
 
