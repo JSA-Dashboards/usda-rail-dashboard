@@ -92,7 +92,7 @@ st.markdown("""
 div[data-testid="stTabs"] button[aria-selected="true"] {
     border-bottom: 2px solid #0693e3; color: #0693e3;
 }
-div[data-testid="metric-container"] {
+div[data-testid="stMetric"], div[data-testid="metric-container"] {
     background: #ffffff; border: 1px solid #e2e8f0;
     border-radius: 10px; padding: 14px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
